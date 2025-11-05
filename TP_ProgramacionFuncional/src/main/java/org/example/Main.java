@@ -1,220 +1,182 @@
 package org.example;
 
+import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Main {
-
     public static void main(String[] args) {
-        caso1Alumnos();
+        caso1Estudiantes();
         System.out.println("\n" + "=".repeat(80) + "\n");
-        caso2Productos();
+        caso2Articulos();
         System.out.println("\n" + "=".repeat(80) + "\n");
-        caso3Libros();
+        caso3Textos();
         System.out.println("\n" + "=".repeat(80) + "\n");
-        caso4Empleados();
+        caso4Trabajadores();
     }
 
-    // ============== CASO 1: ALUMNOS ==============
-    public static void caso1Alumnos() {
-        System.out.println("============== CASO 1: ALUMNOS ==============\n");
-
-        List<Alumno> alumnos = Arrays.asList(
-                new Alumno("Elena Ríos", 7.8, "5C"),
-                new Alumno("Marcos Soto", 5.9, "5D"),
-                new Alumno("Julia Vidal", 9.1, "5C"),
-                new Alumno("Andrés Castro", 7.2, "5D"),
-                new Alumno("Silvia Peña", 6.4, "5C"),
-                new Alumno("David Navarro", 8.3, "5D"),
-                new Alumno("Natalia Gil", 9.8, "5C"),
-                new Alumno("Ricardo Blasco", 6.9, "5D")
+    public static void caso1Estudiantes() {
+        System.out.println("============== CASO 1: ESTUDIANTES ==============\n");
+        List<Alumno> estudiantes = Arrays.asList(
+                new Alumno("Lucía Benítez", 8.2, "6A"),
+                new Alumno("Tomás Herrera", 6.1, "6B"),
+                new Alumno("Camila Gómez", 9.4, "6A"),
+                new Alumno("Pablo López", 7.5, "6B"),
+                new Alumno("Florencia Rivas", 5.8, "6A"),
+                new Alumno("Ignacio Torres", 8.7, "6B"),
+                new Alumno("Valentina Díaz", 9.9, "6A"),
+                new Alumno("Rodrigo Álvarez", 6.7, "6B")
         );
 
-        // 1. Nombres de aprobados (≥7) en mayúsculas y ordenados
-        System.out.println("1. Alumnos aprobados (nota ≥ 7) en mayúsculas:");
-        List<String> aprobados = alumnos.stream()
-                .filter(a -> a.getNota() >= 7)
-                .map(a -> a.getNombre().toUpperCase())
+        System.out.println("1. Estudiantes aprobados (nota ≥ 7) en mayúsculas:");
+        List<String> aprobados = estudiantes.stream()
+                .filter(e -> e.getNota() >= 7.0)
+                .map(e -> e.getNombre().toUpperCase())
                 .sorted()
                 .collect(Collectors.toList());
         aprobados.forEach(System.out::println);
 
-        // 2. Promedio general de notas
         System.out.println("\n2. Promedio general de notas:");
-        double promedioGeneral = alumnos.stream()
+        double promedioGeneral = estudiantes.stream()
                 .mapToDouble(Alumno::getNota)
                 .average()
                 .orElse(0.0);
         System.out.printf("Promedio: %.2f\n", promedioGeneral);
 
-        // 3. Agrupar alumnos por curso
-        System.out.println("\n3. Alumnos agrupados por curso:");
-        Map<String, List<Alumno>> alumnosPorCurso = alumnos.stream()
+        System.out.println("\n3. Estudiantes agrupados por curso:");
+        Map<String, List<Alumno>> estudiantesPorCurso = estudiantes.stream()
                 .collect(Collectors.groupingBy(Alumno::getCurso));
-        alumnosPorCurso.forEach((curso, lista) -> {
+        estudiantesPorCurso.forEach((curso, lista) -> {
             System.out.println("Curso " + curso + ":");
-            lista.forEach(a -> System.out.println("  - " + a.getNombre()));
+            lista.forEach(e -> System.out.println("  - " + e.getNombre()));
         });
 
-        // 4. Los 3 mejores promedios
         System.out.println("\n4. Los 3 mejores promedios:");
-        alumnos.stream()
+        estudiantes.stream()
                 .sorted(Comparator.comparingDouble(Alumno::getNota).reversed())
                 .limit(3)
-                .forEach(a -> System.out.printf("  %s - Nota: %.2f\n", a.getNombre(), a.getNota()));
+                .forEach(e -> System.out.printf("  %s - Nota: %.2f\n", e.getNombre(), e.getNota()));
     }
 
-    // ============== CASO 2: PRODUCTOS ==============
-    public static void caso2Productos() {
-        System.out.println("============== CASO 2: PRODUCTOS ==============\n");
-
-        List<Producto> productos = Arrays.asList(
-                new Producto("Auriculares Inalámbricos", "Audio", 95.00, 45),
-                new Producto("Power Bank 10000mAh", "Accesorios", 30.50, 60),
-                new Producto("Smartwatch Deportivo", "Wearables", 150.00, 25),
-                new Producto("Funda Silicona Móvil", "Accesorios", 15.00, 100),
-                new Producto("Televisor QLED 55\"", "Visual", 950.00, 12),
-                new Producto("Proyector Portátil", "Visual", 320.00, 18),
-                new Producto("Router WiFi 6", "Redes", 85.00, 50),
-                new Producto("Cargador Rápido USB-C", "Accesorios", 20.00, 75)
+    public static void caso2Articulos() {
+        System.out.println("============== CASO 2: ARTÍCULOS ==============\n");
+        List<Producto> articulos = Arrays.asList(
+                new Producto("Teclado Mecánico RGB", "Periféricos", 120.0, 40),
+                new Producto("Mouse Gamer Inalámbrico", "Periféricos", 85.0, 55),
+                new Producto("Monitor 27\" 2K", "Pantallas", 320.0, 20),
+                new Producto("Cable HDMI 2.1", "Accesorios", 18.0, 100),
+                new Producto("Laptop Ultraliviana", "Computadoras", 950.0, 10),
+                new Producto("Tablet Android 10\"", "Dispositivos", 210.0, 25),
+                new Producto("Disco SSD 1TB", "Almacenamiento", 110.0, 60),
+                new Producto("Memoria RAM 16GB", "Componentes", 70.0, 80)
         );
 
-        // 1. Productos con precio > 100, ordenados por precio descendente
-        System.out.println("1. Productos con precio mayor a $100 (ordenados por precio):");
-        productos.stream()
-                .filter(p -> p.getPrecio() > 100)
+        System.out.println("1. Artículos con precio mayor a $100 (ordenados por precio):");
+        articulos.stream()
+                .filter(a -> a.getPrecio() > 100.0)
                 .sorted(Comparator.comparingDouble(Producto::getPrecio).reversed())
                 .forEach(System.out::println);
 
-        // 2. Agrupar por categoría y calcular stock total
         System.out.println("\n2. Stock total por categoría:");
-        Map<String, Integer> stockPorCategoria = productos.stream()
-                .collect(Collectors.groupingBy(
-                        Producto::getCategoria,
-                        Collectors.summingInt(Producto::getStock)
-                ));
-        stockPorCategoria.forEach((cat, stock) ->
-                System.out.printf("  %s: %d unidades\n", cat, stock));
+        Map<String, Integer> stockPorCategoria = articulos.stream()
+                .collect(Collectors.groupingBy(Producto::getCategoria, Collectors.summingInt(Producto::getStock)));
+        stockPorCategoria.forEach((cat, stock) -> System.out.printf("  %s: %d unidades\n", cat, stock));
 
-        // 3. String con nombre;precio separados por ";"
-        System.out.println("\n3. Productos en formato nombre;precio:");
-        String productosConcatenados = productos.stream()
-                .map(p -> p.getNombre() + ";" + p.getPrecio())
+        System.out.println("\n3. Artículos en formato nombre;precio:");
+        String articulosConcatenados = articulos.stream()
+                .map(a -> a.getNombre() + ";" + a.getPrecio())
                 .collect(Collectors.joining(";"));
-        System.out.println(productosConcatenados);
+        System.out.println(articulosConcatenados);
 
-        // 4. Precio promedio general y por categoría
         System.out.println("\n4. Precio promedio:");
-        double precioPromedioGeneral = productos.stream()
+        double precioPromedioGeneral = articulos.stream()
                 .mapToDouble(Producto::getPrecio)
                 .average()
                 .orElse(0.0);
         System.out.printf("  General: $%.2f\n", precioPromedioGeneral);
 
         System.out.println("  Por categoría:");
-        Map<String, Double> promedioPorCategoria = productos.stream()
-                .collect(Collectors.groupingBy(
-                        Producto::getCategoria,
-                        Collectors.averagingDouble(Producto::getPrecio)
-                ));
-        promedioPorCategoria.forEach((cat, promedio) ->
-                System.out.printf("    %s: $%.2f\n", cat, promedio));
+        Map<String, Double> promedioPorCategoria = articulos.stream()
+                .collect(Collectors.groupingBy(Producto::getCategoria, Collectors.averagingDouble(Producto::getPrecio)));
+        promedioPorCategoria.forEach((cat, promedio) -> System.out.printf("    %s: $%.2f\n", cat, promedio));
     }
 
-    // ============== CASO 3: LIBROS ==============
-    public static void caso3Libros() {
-        System.out.println("============== CASO 3: LIBROS ==============\n");
-
-        List<Libro> libros = Arrays.asList(
-                new Libro("El umbral del invierno", "Isabel Allende", 380, 20.50),
-                new Libro("La sombra del viento", "Carlos Ruiz Zafón", 700, 30.00),
-                new Libro("El código Da Vinci", "Dan Brown", 600, 18.99),
-                new Libro("Crimen y castigo", "Fiódor Dostoyevski", 670, 24.50),
-                new Libro("Ensayo sobre la ceguera", "José Saramago", 350, 15.99),
-                new Libro("Historia de dos ciudades", "Charles Dickens", 450, 19.95),
-                new Libro("Moby Dick", "Herman Melville", 750, 26.99),
-                new Libro("Orgullo y prejuicio", "Jane Austen", 400, 17.00)
+    public static void caso3Textos() {
+        System.out.println("============== CASO 3: TEXTOS ==============\n");
+        List<Libro> textos = Arrays.asList(
+                new Libro("Cien años de soledad", "Gabriel García Márquez", 480, 22.5),
+                new Libro("Los pilares de la Tierra", "Ken Follett", 920, 35.0),
+                new Libro("1984", "George Orwell", 350, 18.9),
+                new Libro("Rayuela", "Julio Cortázar", 600, 27.5),
+                new Libro("Fahrenheit 451", "Ray Bradbury", 290, 15.2),
+                new Libro("It", "Stephen King", 1130, 40.0),
+                new Libro("El alquimista", "Paulo Coelho", 240, 14.8),
+                new Libro("Drácula", "Bram Stoker", 520, 21.0)
         );
 
-        // 1. Títulos de libros con más de 300 páginas, ordenados alfabéticamente
-        System.out.println("1. Libros con más de 300 páginas (orden alfabético):");
-        libros.stream()
-                .filter(l -> l.getPaginas() > 300)
+        System.out.println("1. Textos con más de 300 páginas (orden alfabético):");
+        textos.stream()
+                .filter(t -> t.getPaginas() > 300)
                 .map(Libro::getTitulo)
                 .sorted()
                 .forEach(titulo -> System.out.println("  - " + titulo));
 
-        // 2. Promedio de páginas
         System.out.println("\n2. Promedio de páginas:");
-        double promedioPaginas = libros.stream()
+        double promedioPaginas = textos.stream()
                 .mapToInt(Libro::getPaginas)
                 .average()
                 .orElse(0.0);
         System.out.printf("  %.2f páginas\n", promedioPaginas);
 
-        // 3. Agrupar por autor y contar libros
-        System.out.println("\n3. Cantidad de libros por autor:");
-        Map<String, Long> librosPorAutor = libros.stream()
-                .collect(Collectors.groupingBy(
-                        Libro::getAutor,
-                        Collectors.counting()
-                ));
-        librosPorAutor.forEach((autor, cantidad) ->
-                System.out.printf("  %s: %d libro(s)\n", autor, cantidad));
+        System.out.println("\n3. Cantidad de textos por autor:");
+        Map<String, Long> textosPorAutor = textos.stream()
+                .collect(Collectors.groupingBy(Libro::getAutor, Collectors.counting()));
+        textosPorAutor.forEach((autor, cantidad) -> System.out.printf("  %s: %d texto(s)\n", autor, cantidad));
 
-        // 4. Libro más caro
-        System.out.println("\n4. Libro más caro:");
-        libros.stream()
+        System.out.println("\n4. Texto más caro:");
+        textos.stream()
                 .max(Comparator.comparingDouble(Libro::getPrecio))
-                .ifPresent(libro -> System.out.println("  " + libro));
+                .ifPresent(texto -> System.out.println("  " + texto));
     }
 
-    // ============== CASO 4: EMPLEADOS ==============
-    public static void caso4Empleados() {
-        System.out.println("============== CASO 4: EMPLEADOS ==============\n");
-
-        List<Empleado> empleados = Arrays.asList(
-                new Empleado("Héctor Gil", "Desarrollo", 3700.00, 32),
-                new Empleado("Laura Pérez", "Administración", 2900.00, 26),
-                new Empleado("Javier Mora", "Desarrollo", 4500.00, 45),
-                new Empleado("Eva Soto", "Marketing", 2700.00, 30),
-                new Empleado("Daniel Vega", "Desarrollo", 4000.00, 24),
-                new Empleado("Clara Noya", "Administración", 3100.00, 36),
-                new Empleado("Sergio Rico", "Marketing", 2300.00, 22),
-                new Empleado("Marta Díaz", "Marketing", 2800.00, 28)
+    public static void caso4Trabajadores() {
+        System.out.println("============== CASO 4: TRABAJADORES ==============\n");
+        List<Empleado> trabajadores = Arrays.asList(
+                new Empleado("Sofía Luna", "Ventas", 3100.0, 27),
+                new Empleado("Lucas Romero", "IT", 4600.0, 38),
+                new Empleado("Martina Salas", "Recursos Humanos", 2900.0, 29),
+                new Empleado("Federico Paredes", "IT", 4100.0, 33),
+                new Empleado("Patricia León", "Finanzas", 3700.0, 41),
+                new Empleado("Juan Arce", "Ventas", 3300.0, 25),
+                new Empleado("Gabriela Torres", "Marketing", 2800.0, 23),
+                new Empleado("Nicolás Vega", "Finanzas", 3950.0, 31)
         );
 
-        // 1. Empleados con salario > 2000, ordenados por salario descendente
-        System.out.println("1. Empleados con salario mayor a $2000 (orden descendente):");
-        empleados.stream()
-                .filter(e -> e.getSalario() > 2000)
+        System.out.println("1. Trabajadores con salario mayor a $2000 (orden descendente):");
+        trabajadores.stream()
+                .filter(t -> t.getSalario() > 2000.0)
                 .sorted(Comparator.comparingDouble(Empleado::getSalario).reversed())
                 .forEach(System.out::println);
 
-        // 2. Salario promedio general
         System.out.println("\n2. Salario promedio general:");
-        double salarioPromedio = empleados.stream()
+        double salarioPromedio = trabajadores.stream()
                 .mapToDouble(Empleado::getSalario)
                 .average()
                 .orElse(0.0);
         System.out.printf("  $%.2f\n", salarioPromedio);
 
-        // 3. Agrupar por departamento y sumar salarios
         System.out.println("\n3. Suma de salarios por departamento:");
-        Map<String, Double> salariosPorDepartamento = empleados.stream()
-                .collect(Collectors.groupingBy(
-                        Empleado::getDepartamento,
-                        Collectors.summingDouble(Empleado::getSalario)
-                ));
-        salariosPorDepartamento.forEach((dept, total) ->
-                System.out.printf("  %s: $%.2f\n", dept, total));
+        Map<String, Double> salariosPorDepartamento = trabajadores.stream()
+                .collect(Collectors.groupingBy(Empleado::getDepartamento, Collectors.summingDouble(Empleado::getSalario)));
+        salariosPorDepartamento.forEach((dept, total) -> System.out.printf("  %s: $%.2f\n", dept, total));
 
-        // 4. Los 2 empleados más jóvenes
-        System.out.println("\n4. Los 2 empleados más jóvenes:");
-        empleados.stream()
+        System.out.println("\n4. Los 2 trabajadores más jóvenes:");
+        trabajadores.stream()
                 .sorted(Comparator.comparingInt(Empleado::getEdad))
                 .limit(2)
                 .map(Empleado::getNombre)
